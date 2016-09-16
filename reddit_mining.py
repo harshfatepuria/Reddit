@@ -48,17 +48,25 @@ def get_submissions_by_a_user(user):
 	print len_submissions
 
 def get_comments_by_a_user(user):
+	unique_subreddits = dict()
 	user = r.get_redditor(user)
 	comments = user.get_comments(limit=None)
-	print "# comments by",user,"=",
 	
 	len_comments = 0
 	for comment in comments:
 		len_comments = len_comments + 1
-	print len_comments
+		json_comment = vars(comment)
+		subreddit_commented_on = json_comment['subreddit']
+		json_subreddit = vars(subreddit_commented_on)
+		subreddit_name = str(json_subreddit['display_name'])
+		if subreddit_name in unique_subreddits:
+			unique_subreddits[subreddit_name] = unique_subreddits[subreddit_name] + 1
+		else:
+			unique_subreddits[subreddit_name] = 1
+	sorted_unique_subreddits = sorted(unique_subreddits.items(), key=operator.itemgetter(1), reverse=True)
+	pp.pprint(sorted_unique_subreddits)
 
 
 sorted_authors_of_subreddit = get_authors_of_comments_on_submission_about_subreddit('marvel')
 pp.pprint(sorted_authors_of_subreddit)
-get_submissions_by_a_user(sorted_authors_of_subreddit[0][0])
 get_comments_by_a_user(sorted_authors_of_subreddit[0][0])
