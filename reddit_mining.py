@@ -64,9 +64,42 @@ def get_comments_by_a_user(user):
 		else:
 			unique_subreddits[subreddit_name] = 1
 	sorted_unique_subreddits = sorted(unique_subreddits.items(), key=operator.itemgetter(1), reverse=True)
-	pp.pprint(sorted_unique_subreddits)
+	return sorted_unique_subreddits
+
+def get_subreddits_commented_on_by_a_set_of_users(subreddit , list_of_users_tuple):
+	generic_subreddit_commented_on_by_all_users = dict()
+	i = 1
+	number_of_users = len(list_of_users_tuple)
+	for user_tuple in list_of_users_tuple:
+		username = user_tuple[0]
+		list_of_subreddits_tuple = get_comments_by_a_user(username)
+		print i,"of",number_of_users,") has commented on",len(list_of_subreddits_tuple),"unique subreddits"
+		for subreddit_tuple in list_of_subreddits_tuple:
+			subreddit_name = subreddit_tuple[0]
+			if subreddit_name in generic_subreddit_commented_on_by_all_users:
+				generic_subreddit_commented_on_by_all_users[subreddit_name] = generic_subreddit_commented_on_by_all_users[subreddit_name] + subreddit_tuple[1]
+			else:
+				generic_subreddit_commented_on_by_all_users[subreddit_name] = subreddit_tuple[1]
+		i = i + 1
+		if i % 31 == 0:
+			output_file=open('subreddits_related_to_' + subreddit + '_' + str(i) + '.txt','w')
+			output_file.write(str(generic_subreddit_commented_on_by_all_users))
+			output_file.close()
+	output_file=open('subreddits_related_to_' + subreddit + '_all.txt','w')
+	output_file.write(str(generic_subreddit_commented_on_by_all_users))
+	output_file.close()
+	
 
 
-sorted_authors_of_subreddit = get_authors_of_comments_on_submission_about_subreddit('marvel')
-pp.pprint(sorted_authors_of_subreddit)
-get_comments_by_a_user(sorted_authors_of_subreddit[0][0])
+subreddit='marvel'
+sorted_authors_of_subreddit = get_authors_of_comments_on_submission_about_subreddit(subreddit)
+
+output_file=open('all_commenters_of_' + subreddit + '.txt','w')
+output_file.write(str(sorted_authors_of_subreddit))
+output_file.close()
+
+input_file=open('all_commenters_of_' + subreddit + '.txt','r')
+sorted_authors_of_subreddit_new=eval(input_file.read())
+input_file.close()
+
+get_subreddits_commented_on_by_a_set_of_users(subreddit , sorted_authors_of_subreddit_new)
