@@ -1,1 +1,0 @@
-{'_info_url': u'https://api.reddit.com/user/grome45/about/', 'name': u'grome45', 'reddit_session': <praw.Reddit object at 0x10897b790>, '_case_name': u'grome45', '_has_fetched': False, '_mod_subs': None, '_uniq': None, '_url': u'https://api.reddit.com/user/grome45/', 'json_dict': None, '_underscore_names': None}
