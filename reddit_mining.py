@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+
+__author__ = "Harsh Fatepuria"
+__credits__ = "Harsh Fatepuria"
+__maintainer__ = "Harsh Fatepuria"
+__email__ = "fatepuri@usc.edu"
+__status__ = "Developement"
+
+'''
+note: needs praw and pprint modules in python installed to work
+'''
+
 import praw
 import pprint
 import operator
@@ -119,3 +131,4 @@ for subreddit in subreddits:
 			get_subreddits_commented_on_by_a_set_of_users(subreddit , sorted_authors_of_subreddit)
 		except:
 			continue
+			
