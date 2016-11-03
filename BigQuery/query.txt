@@ -1,0 +1,39 @@
+SELECT
+  'shield' AS query_subreddit,
+  related_subreddit,
+  COUNT(TOP_COMMENTERS.author) AS value
+FROM (
+  SELECT
+    TOP_COMMENTERS.author,
+    UNIQUE(A.subreddit) AS related_subreddit
+  FROM (
+    SELECT
+      author,
+      COUNT(id) AS comment_count
+    FROM
+      [fh-bigquery:reddit_comments.all]
+    WHERE
+      subreddit='shield'
+    GROUP BY
+      author
+    ORDER BY
+      comment_count DESC
+    LIMIT
+      1000) AS TOP_COMMENTERS
+  JOIN
+    [fh-bigquery:reddit_comments.all] AS A
+  ON
+    (TOP_COMMENTERS.author=A.author)
+  GROUP BY
+    TOP_COMMENTERS.author)
+GROUP BY
+  related_subreddit
+ORDER BY
+  value DESC
+LIMIT
+  500
+
+
+
+https://bigquery.cloud.google.com/results/integral-tensor-145619:bquijob_e3ad0cd_157da5386f8
+
